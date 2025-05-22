@@ -56,7 +56,7 @@ public class DatabaseStudentManager
             return exito;
         }
 
-        public String getMensaje()
+        public String obtenerMensaje()
         {
             return mensaje;
         }
@@ -64,7 +64,6 @@ public class DatabaseStudentManager
 
     public ResultadoInsercion agregarNuevoAlumno(String dni, String nombre, String apellidos)
     {
-
         if (dni.length() > 10)
         {
             return new ResultadoInsercion(false, "El DNI no puede exceder los 10 caracteres.");
@@ -84,27 +83,22 @@ public class DatabaseStudentManager
         try
         {
             conn = DriverManager.getConnection(URL_BASE_DATOS, USUARIO, CONTRASEÑA);
-
-
             String sqlMaxId = "SELECT MAX(ID) AS max_id FROM Alumnos";
             stmt = conn.prepareStatement(sqlMaxId);
             rs = stmt.executeQuery();
-            int nuevoId = 1; // Si la tabla está vacía, empezar con ID 1
+            int nuevoId = 1;
             if (rs.next() && rs.getInt("max_id") > 0)
             {
                 nuevoId = rs.getInt("max_id") + 1;
             }
             rs.close();
             stmt.close();
-
-
             String sqlInsert = "INSERT INTO Alumnos (ID, DNI, NOMBRE, APELLIDOS) VALUES (?, ?, ?, ?)";
             stmt = conn.prepareStatement(sqlInsert);
             stmt.setInt(1, nuevoId);
             stmt.setString(2, dni);
             stmt.setString(3, nombre);
             stmt.setString(4, apellidos);
-
             int filasAfectadas = stmt.executeUpdate();
 
             if (filasAfectadas > 0)
@@ -119,7 +113,7 @@ public class DatabaseStudentManager
         catch (SQLException e)
         {
             e.printStackTrace();
-            if (e.getErrorCode() == 1062) // Código de error MySQL para entrada duplicada
+            if (e.getErrorCode() == 1062)
             {
                 return new ResultadoInsercion(false, "El DNI ya está registrado en la base de datos.");
             }

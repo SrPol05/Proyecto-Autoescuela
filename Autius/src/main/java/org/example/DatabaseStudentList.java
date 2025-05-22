@@ -12,7 +12,7 @@ public class DatabaseStudentList
     private static final String USUARIO = "admin";
     private static final String CONTRASEÑA = "Qwerty2005#";
 
-    public void showStudentList()
+    public void mostrarListaAlumnos()
     {
         try
         {
@@ -35,20 +35,13 @@ public class DatabaseStudentList
             rs.close();
             stmt.close();
             conn.close();
-
-
             String[][] datosTabla = datosAlumnos.toArray(new String[0][]);
             String[] nombresColumnas = {"ID", "Nombre", "Apellidos", "DNI"};
-
             JTable tabla = new JTable(datosTabla, nombresColumnas);
             tabla.setFillsViewportHeight(true);
             tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
             JScrollPane panelDesplazamiento = new JScrollPane(tabla);
             panelDesplazamiento.setPreferredSize(new Dimension(500, 400));
-
-
             JFrame ventanaAlumnos = new JFrame("Listado de Alumnos");
             ventanaAlumnos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             ventanaAlumnos.setLayout(new BorderLayout());
